@@ -24,15 +24,15 @@ export default function Page() {
 
   // if (isLoading) return <p>Loading...</p>
   // if (!data) return <p>No profile data</p>
-  const listItems = dozerDummyData.models.map((m) => (
+  const dozerCards = dozerDummyData.models.map((m) => (
     <DozerCard
       key={m.modelId}
       makeName={m.brand}
       modelName={m.model_name}
       category={m.productCategory}
-      engineHp={m.specs[1].spec_value[0]} // TODO: extract based on key name
-      operatingWeight={m.specs[2].spec_value[0]}
+      engineHp={m.specs[1].spec_value[0]}         // TODO: extract based on key name
+      operatingWeight={m.specs[2].spec_value[0]}  // TODO: extract based on key name
     ></DozerCard>
   ));
-  return listItems;
+  return <div className='dozerCardsContainer'>{dozerCards}</div>;
 }
