@@ -1,55 +1,124 @@
-//"use client"
+'use client';
 
 import { dozerDummyData } from '@/app/lib/api'; // TODO: fix CORS issue and fetch data
-import DozerCard, { DozerInfo } from '@/app/ui/DozerCard';
+import DozerCard, { DozerInfo } from '@/app/ui/search/DozerCard';
 import { useState, useEffect } from 'react';
+import Slider from '@mui/material/Slider';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import SearchResults from '@/app/ui/search/SearchResults';
 
 export default function Page() {
-  // const [data, setData] = useState(null)
-  // const [isLoading, setLoading] = useState(true)
+  const [includeSmall, setIncludeSmall] = useState(false);
+  const [includeMedium, setIncludeMedium] = useState(false);
+  const [includeLarge, setIncludeLarge] = useState(false);
+  const [includeWheel, setIncludeWheel] = useState(false);
 
-  // useEffect(() => {
-  //   console.log('about to fetch');
-  //   fetch('https://www.cat.com/content/catdotcom/en_US/products/new/equipment/dozers/jcr:content/root/responsivegrid/productcards.feed.json',
-  //   {
-  //     method : "GET",
-  //     mode: 'no-cors',
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setData(data)
-  //       setLoading(false)
-  //     })
-  // }, [])
+  const dozerInfos: DozerInfo[] = convertDataToDozers(dozerDummyData)
+    .filter((d) => filterCriteria(d));
 
-  // if (isLoading) return <p>Loading...</p>
-  // if (!data) return <p>No profile data</p>
+  // checkbox change handlers
+  function smallDozerOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setIncludeSmall(event.target.checked);
+  }
+  function mediumDozerOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setIncludeMedium(event.target.checked);
+  }
+  function largeDozerOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setIncludeLarge(event.target.checked);
+  }
+  function wheelDozerOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setIncludeWheel(event.target.checked);
+  }
 
-  // convert data
-  const dozerInfos: DozerInfo[] = dozerDummyData.models.map((m) => {
-    const powerSpec = m.specs.find(s => s.spec_name.toLowerCase().includes('power'));
-    const powerString: string = powerSpec == undefined ? 'Unknown' : powerSpec.spec_value[0];
-    const powerNumber: number | undefined = powerSpec == undefined ? undefined : Number(powerSpec.spec_value[0].split(" ")[0]);
+  function convertDataToDozers(data) {
+    const dozerInfos: DozerInfo[] = data.models.map((m) => {
+      const powerSpec = m.specs.find((s) =>
+        s.spec_name.toLowerCase().includes('power'),
+      );
+      const powerString: string =
+        powerSpec == undefined ? 'Unknown' : powerSpec.spec_value[0];
+      const powerNumber: number | undefined =
+        powerSpec == undefined
+          ? undefined
+          : Number(powerSpec.spec_value[0].split(' ')[0]);
 
-    const weightSpec = m.specs.find(s => s.spec_name.toLowerCase().includes('operating weight'));
-    const weigthString: string = weightSpec == undefined ? 'Unknown' : weightSpec.spec_value[0];
-    const weightNumber: number | undefined = weightSpec == undefined ? undefined : Number(weightSpec.spec_value[0].split(" ")[0]);
+      const weightSpec = m.specs.find((s) =>
+        s.spec_name.toLowerCase().includes('operating weight'),
+      );
+      const weigthString: string =
+        weightSpec == undefined ? 'Unknown' : weightSpec.spec_value[0];
+      const weightNumber: number | undefined =
+        weightSpec == undefined
+          ? undefined
+          : Number(weightSpec.spec_value[0].split(' ')[0]);
 
-    const dozerInfo: DozerInfo = {
+      const dozerInfo: DozerInfo = {
         category: m.productCategory,
         engineHp: powerNumber,
         engineHpString: powerString,
         makeName: m.brand,
-        modelId: m.modelId,
-        modelName: m.model_name, 
+        modelId: m.idmodel,
+        modelName: m.model_name,
         operatingWeightString: weigthString,
         operatingWeight: weightNumber,
-    };
-    return dozerInfo;
-  });
+      };
+      return dozerInfo;
+    });
 
-  const dozerCards = dozerInfos.map((d) => (
-    <DozerCard {...d} key={d.modelId} />
-  ));
-  return <div className='dozerCardsContainer'>{dozerCards}</div>;
+    return dozerInfos;
+  }
+
+  function filterCriteria(d: DozerInfo): boolean {
+    const noCheckboxesSelected: boolean =
+      !includeSmall && !includeMedium && !includeLarge && !includeWheel;
+    if (noCheckboxesSelected) {
+      return true;
+    }
+
+    if (includeSmall && d.category.toLowerCase().includes('small dozer')) {
+      return true;
+    }
+    if (includeMedium && d.category.toLowerCase().includes('medium dozer')) {
+      return true;
+    } else if (
+      includeLarge &&
+      d.category.toLowerCase().includes('large dozer')
+    ) {
+      return true;
+    } else if (
+      includeWheel &&
+      d.category.toLowerCase().includes('wheel dozer')
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  return (
+    <>
+      <FormGroup>
+        <FormControlLabel
+          control={<Checkbox onChange={smallDozerOnChange} />}
+          label="Small Dozer"
+        />
+        <FormControlLabel
+          control={<Checkbox onChange={mediumDozerOnChange} />}
+          label="Medium Dozer"
+        />
+        <FormControlLabel
+          control={<Checkbox onChange={largeDozerOnChange} />}
+          label="Large Dozer"
+        />
+        <FormControlLabel
+          control={<Checkbox onChange={wheelDozerOnChange} />}
+          label="Wheel Dozer"
+        />
+      </FormGroup>
+
+      <SearchResults dozerInfos={dozerInfos}/>
+    </>
+  );
 }

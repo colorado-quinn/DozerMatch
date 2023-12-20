@@ -7,9 +7,9 @@ export interface DozerInfo {
   modelName: string;
   category: string;
   engineHp: number | undefined;
-  engineHpString: string;
+  engineHpString: string; // TODO: remove string and use number?
   operatingWeight: number | undefined;
-  operatingWeightString: string;
+  operatingWeightString: string; // TODO: remove string and use number?
 }
 
 export default function DozerCard({
