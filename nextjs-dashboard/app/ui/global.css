@@ -16,3 +16,13 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+div.dozerCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div.cardContainer {
+  width: 375px;
+  margin: 5px;
+}
