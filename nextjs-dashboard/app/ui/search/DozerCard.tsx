@@ -1,5 +1,6 @@
 import { CardContent } from '@mui/material';
 import Card from '@mui/material/Card';
+import Image from 'next/image';
 
 export interface DozerInfo {
   modelId: string;
@@ -10,6 +11,7 @@ export interface DozerInfo {
   engineHpString: string; // TODO: remove string and use number?
   operatingWeight: number | undefined;
   operatingWeightString: string; // TODO: remove string and use number?
+  imageUrl: string;
 }
 
 export default function DozerCard({
@@ -20,10 +22,10 @@ export default function DozerCard({
   operatingWeightString,
   engineHp,
   operatingWeight,
-
+  imageUrl
 }: DozerInfo) {
   return (
-    <div className='cardContainer'>
+    <div className="cardContainer">
       <Card>
         <CardContent>
           <div>Make: {makeName}</div>
@@ -33,6 +35,12 @@ export default function DozerCard({
           <div>Operating weight: {operatingWeightString}</div>
           {/* <div>Engine HP: {engineHp}</div>
           <div>Operating weight: {operatingWeight}</div> */}
+          <Image
+            src={imageUrl}
+            width={200}
+            height={200}
+            alt={`Picture of dozer ${makeName} - ${modelName}`}
+          />
         </CardContent>
       </Card>
     </div>

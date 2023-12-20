@@ -63,6 +63,7 @@ export default function Page() {
         modelName: m.model_name,
         operatingWeightString: weigthString,
         operatingWeight: weightNumber,
+        imageUrl: m.image_url
       };
       return dozerInfo;
     });
