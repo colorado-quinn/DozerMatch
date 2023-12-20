@@ -6,16 +6,21 @@ export interface DozerInfo {
   makeName: string;
   modelName: string;
   category: string;
-  engineHp: string; // TODO: number
-  operatingWeight: string; // TODO: number
+  engineHp: number | undefined;
+  engineHpString: string;
+  operatingWeight: number | undefined;
+  operatingWeightString: string;
 }
 
 export default function DozerCard({
   makeName,
   modelName,
   category,
+  engineHpString,
+  operatingWeightString,
   engineHp,
   operatingWeight,
+
 }: DozerInfo) {
   return (
     <div className='cardContainer'>
@@ -24,8 +29,10 @@ export default function DozerCard({
           <div>Make: {makeName}</div>
           <div>Model: {modelName}</div>
           <div>Category: {category}</div>
-          <div>Engine HP: {engineHp}</div>
-          <div>Operating weight: {operatingWeight}</div>
+          <div>Engine HP: {engineHpString}</div>
+          <div>Operating weight: {operatingWeightString}</div>
+          {/* <div>Engine HP: {engineHp}</div>
+          <div>Operating weight: {operatingWeight}</div> */}
         </CardContent>
       </Card>
     </div>

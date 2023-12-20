@@ -29,17 +29,21 @@ export default function Page() {
   const dozerInfos: DozerInfo[] = dozerDummyData.models.map((m) => {
     const powerSpec = m.specs.find(s => s.spec_name.toLowerCase().includes('power'));
     const powerString: string = powerSpec == undefined ? 'Unknown' : powerSpec.spec_value[0];
+    const powerNumber: number | undefined = powerSpec == undefined ? undefined : Number(powerSpec.spec_value[0].split(" ")[0]);
 
     const weightSpec = m.specs.find(s => s.spec_name.toLowerCase().includes('operating weight'));
     const weigthString: string = weightSpec == undefined ? 'Unknown' : weightSpec.spec_value[0];
+    const weightNumber: number | undefined = weightSpec == undefined ? undefined : Number(weightSpec.spec_value[0].split(" ")[0]);
 
     const dozerInfo: DozerInfo = {
         category: m.productCategory,
-        engineHp: powerString,
+        engineHp: powerNumber,
+        engineHpString: powerString,
         makeName: m.brand,
         modelId: m.modelId,
         modelName: m.model_name, 
-        operatingWeight: weigthString,
+        operatingWeightString: weigthString,
+        operatingWeight: weightNumber,
     };
     return dozerInfo;
   });
