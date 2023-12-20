@@ -1,7 +1,8 @@
 import { CardContent } from '@mui/material';
 import Card from '@mui/material/Card';
 
-export interface DozerCardProps {
+export interface DozerInfo {
+  modelId: string;
   makeName: string;
   modelName: string;
   category: string;
@@ -15,7 +16,7 @@ export default function DozerCard({
   category,
   engineHp,
   operatingWeight,
-}: DozerCardProps) {
+}: DozerInfo) {
   return (
     <div className='cardContainer'>
       <Card>
