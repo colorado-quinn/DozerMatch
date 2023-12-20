@@ -26,3 +26,13 @@ div.cardContainer {
   width: 375px;
   margin: 5px;
 }
+
+div.searchCriteria {
+  /* background-color: red;
+  width: 20%; */
+}
+
+div.searchResults {
+  /* background-color: green;
+  width: 80%; */
+}

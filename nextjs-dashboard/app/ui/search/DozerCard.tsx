@@ -22,7 +22,7 @@ export default function DozerCard({
   operatingWeightString,
   engineHp,
   operatingWeight,
-  imageUrl
+  imageUrl,
 }: DozerInfo) {
   return (
     <div className="cardContainer">
