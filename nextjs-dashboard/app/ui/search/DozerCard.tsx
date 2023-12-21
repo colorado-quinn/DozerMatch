@@ -7,9 +7,9 @@ export interface DozerInfo {
   modelName: string;
   category: string;
   engineHp: number | undefined;
-  engineHpString: string; // TODO: remove string and use number?
+  engineHpString: string;
   operatingWeight: number | undefined;
-  operatingWeightString: string; // TODO: remove string and use number?
+  operatingWeightString: string;
   imageUrl: string;
 }
 export interface DozerCardProps {

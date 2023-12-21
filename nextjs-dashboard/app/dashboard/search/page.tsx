@@ -295,9 +295,9 @@ export default function Page() {
   return (
     <>
       {isDozerMoreInfoDialogOpen && dozerMoreInfoDialog}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="flex">
         {/* TODO: left side fixed, scroll right side */}
-        <div className="col-span-1 h-4">
+        <div className="flex-none">
           <FormGroup>
             <FormControlLabel
               control={<Checkbox onChange={smallDozerOnChange} />}
@@ -332,7 +332,7 @@ export default function Page() {
             />
           </FormGroup>
         </div>
-        <div className="col-span-3 h-4">
+        <div className="flex-1">
           <SearchResults
             dozerInfos={filteredDozerInfos}
             onDozerClick={handleDozerClick}
