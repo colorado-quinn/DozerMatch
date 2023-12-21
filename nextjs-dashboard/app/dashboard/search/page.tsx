@@ -295,9 +295,9 @@ export default function Page() {
   return (
     <>
       {isDozerMoreInfoDialogOpen && dozerMoreInfoDialog}
-      <div className="flex">
-        {/* TODO: left side fixed, scroll right side */}
-        <div className="flex-none">
+      <div className="flex h-full">
+        {/* Fixed Sidebar */}
+        <div className="flex-0">
           <FormGroup>
             <FormControlLabel
               control={<Checkbox onChange={smallDozerOnChange} />}
@@ -332,11 +332,15 @@ export default function Page() {
             />
           </FormGroup>
         </div>
-        <div className="flex-1">
-          <SearchResults
-            dozerInfos={filteredDozerInfos}
-            onDozerClick={handleDozerClick}
-          />
+        {/* Scroll wrapper */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Scrollable container */}
+          <div className="flex-1 overflow-y-scroll">
+            <SearchResults
+              dozerInfos={filteredDozerInfos}
+              onDozerClick={handleDozerClick}
+            />
+          </div>
         </div>
       </div>
     </>
