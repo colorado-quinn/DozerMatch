@@ -9,10 +9,11 @@ const baseUrl =
 export async function GET() {
   return NextResponse.json(dozerDummyData);
 
+
   // TODO: fetch is failing below with 'Error: read ECONNRESET'
-  // investigate alternatives
+
   const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set('Content-Type', 'application/json');
+  //requestHeaders.set('Content-Type', 'application/json');
   console.log('about to fetch');
   const res = await fetch(baseUrl, {
     headers: requestHeaders,
