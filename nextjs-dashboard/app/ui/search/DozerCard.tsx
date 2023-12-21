@@ -1,5 +1,4 @@
-import { CardContent } from '@mui/material';
-import Card from '@mui/material/Card';
+import { Card, CardActionArea, CardContent } from '@mui/material';
 import Image from 'next/image';
 
 export interface DozerInfo {
@@ -13,35 +12,32 @@ export interface DozerInfo {
   operatingWeightString: string; // TODO: remove string and use number?
   imageUrl: string;
 }
+export interface DozerCardProps {
+  dozer: DozerInfo;
+  onDozerClick: (dozerInfo: DozerInfo) => void;
+}
 
-export default function DozerCard({
-  makeName,
-  modelName,
-  category,
-  engineHpString,
-  operatingWeightString,
-  engineHp,
-  operatingWeight,
-  imageUrl,
-}: DozerInfo) {
+export default function DozerCard({dozer, onDozerClick}: DozerCardProps) {
   return (
     <div className="cardContainer">
       <Card>
-        <CardContent>
-          <div>Make: {makeName}</div>
-          <div>Model: {modelName}</div>
-          <div>Category: {category}</div>
-          <div>Engine HP: {engineHpString}</div>
-          <div>Operating weight: {operatingWeightString}</div>
-          {/* <div>Engine HP: {engineHp}</div>
+        <CardActionArea onClick={() => onDozerClick(dozer)}>
+          <CardContent>
+            <div>Make: {dozer.makeName}</div>
+            <div>Model: {dozer.modelName}</div>
+            <div>Category: {dozer.category}</div>
+            <div>Engine HP: {dozer.engineHpString}</div>
+            <div>Operating weight: {dozer.operatingWeightString}</div>
+            {/* <div>Engine HP: {engineHp}</div>
           <div>Operating weight: {operatingWeight}</div> */}
-          <Image
-            src={imageUrl}
-            width={200}
-            height={200}
-            alt={`Picture of dozer ${makeName} - ${modelName}`}
-          />
-        </CardContent>
+            <Image
+              src={dozer.imageUrl}
+              width={200}
+              height={200}
+              alt={`Picture of dozer ${dozer.makeName} - ${dozer.modelName}`}
+            />
+          </CardContent>
+        </CardActionArea>
       </Card>
     </div>
   );

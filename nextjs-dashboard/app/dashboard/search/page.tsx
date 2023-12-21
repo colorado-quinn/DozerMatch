@@ -3,11 +3,24 @@
 import { dozerDummyData } from '@/app/lib/api'; // TODO: fix CORS issue and fetch data
 import { DozerInfo } from '@/app/ui/search/DozerCard';
 import { useEffect, useState } from 'react';
-import Slider from '@mui/material/Slider';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import SearchResults from '@/app/ui/search/SearchResults';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  FormGroup,
+  Slider,
+  TextField,
+  Typography,
+} from '@mui/material';
+import * as EmailValidator from 'email-validator';
+import { phone } from 'phone';
 
 export default function Page() {
   const [includeSmall, setIncludeSmall] = useState(false);
@@ -21,12 +34,163 @@ export default function Page() {
     filterCriteria(d),
   );
 
-  const minHp: number = Math.min(...dozerInfos.map((d) => d.engineHp || 0));
+  // TODO: consider reduce for performance
+  const minHp: number = Math.min(
+    ...dozerInfos.map((d) => d.engineHp || 100000),
+  );
   const maxHp: number = Math.max(...dozerInfos.map((d) => d.engineHp || 0));
 
   useEffect(() => {
     setHpSliderValue([minHp, maxHp]);
-  }, []);
+  }, [minHp, maxHp]);
+
+  //#region RequestMoreInfo dialog
+  const [dozerMoreInfo, setDozerMoreInfo] = useState<DozerInfo>();
+  const [requestorName, setRequestorName] = useState<string | undefined>(
+    undefined,
+  );
+  const [requestorEmail, setRequestorEmail] = useState<string | undefined>(
+    undefined,
+  );
+  const [requestorPhone, setRequestorPhone] = useState<string | undefined>(
+    undefined,
+  );
+  const [requestorNameIsValid, setRequestorNameIsValid] = useState(true);
+  const [requestorEmailIsValid, setRequestorEmailIsValid] = useState(true);
+  const [requestorPhoneIsValid, setRequestorPhoneIsValid] = useState(true);
+  const [isDozerMoreInfoDialogOpen, setDozerMoreInfoDialogOpen] =
+    useState(false);
+  const handleDialogCancel = () => {
+    setDozerMoreInfoDialogOpen(false);
+    resetForm();
+  };
+  const handleDialogOk = () => {
+    if (validateForm()) {
+      setDozerMoreInfoDialogOpen(false);
+      resetForm();
+
+      // TODO: send to real email server
+      const emailMessage: string = `${requestorName} has requested more information about the ${dozerMoreInfo?.makeName} ${dozerMoreInfo?.modelName} bulldozer. You can reach them at ${requestorEmail} or call them at ${requestorPhone}`;
+      console.log(emailMessage);
+    }
+  };
+
+  const validateForm = (): boolean => {
+    let isValid = true;
+
+    if (requestorName == undefined || requestorName.length == 0) {
+      isValid = false;
+      setRequestorNameIsValid(false);
+    }
+
+    if (
+      requestorEmail == undefined ||
+      requestorEmail.length == 0 ||
+      (requestorEmail != undefined && !EmailValidator.validate(requestorEmail))
+    ) {
+      isValid = false;
+      setRequestorEmailIsValid(false);
+    }
+
+    if (
+      requestorPhone == undefined ||
+      requestorPhone.length == 0 ||
+      (requestorPhone != undefined && !phone(requestorPhone).isValid)
+    ) {
+      isValid = false;
+      setRequestorPhoneIsValid(false);
+    }
+
+    return isValid;
+  };
+
+  const resetForm = () => {
+    setRequestorName(undefined);
+    setRequestorPhone(undefined);
+    setRequestorEmail(undefined);
+    setRequestorNameIsValid(true);
+    setRequestorPhoneIsValid(true);
+    setRequestorEmailIsValid(true);
+  };
+
+  const handleDozerClick = (dozer: DozerInfo) => {
+    setDozerMoreInfo(dozer);
+    setDozerMoreInfoDialogOpen(true);
+  };
+
+  const handleRequestorNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    setRequestorName(e.currentTarget.value);
+    if (e.currentTarget.value.length > 0) {
+      setRequestorNameIsValid(true);
+    }
+  };
+
+  const handleRequestorEmailChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRequestorEmail(e.currentTarget.value);
+    if (e.currentTarget.value.length > 0) {
+      setRequestorEmailIsValid(true);
+    }
+  };
+
+  const handleRequestorPhoneChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRequestorPhone(e.currentTarget.value);
+    if (e.currentTarget.value.length > 0) {
+      setRequestorPhoneIsValid(true);
+    }
+  };
+
+  const dozerMoreInfoDialog: JSX.Element = (
+    <Dialog open={isDozerMoreInfoDialogOpen} onClose={handleDialogCancel}>
+      <DialogTitle>Request More Information</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Want more info on this this {dozerMoreInfo?.makeName}{' '}
+          {dozerMoreInfo?.modelName}? We&apos;d love to hear from you!
+        </DialogContentText>
+        <div className="moreInfoInput">
+          <TextField
+            autoFocus={true}
+            label={'Full Name'}
+            onChange={handleRequestorNameChange}
+            error={!requestorNameIsValid}
+            helperText={
+              requestorNameIsValid ? '' : 'Please provide your full name'
+            }
+          />
+        </div>
+        <div className="moreInfoInput">
+          <TextField
+            label={'Email'}
+            onChange={handleRequestorEmailChange}
+            error={!requestorEmailIsValid}
+            helperText={
+              requestorEmailIsValid ? '' : 'Please provide an email address'
+            }
+          />
+        </div>
+        <div className="moreInfoInput">
+          <TextField
+            label={'Phone'}
+            onChange={handleRequestorPhoneChange}
+            error={!requestorPhoneIsValid}
+            helperText={
+              requestorPhoneIsValid ? '' : 'Please provide a phone number'
+            }
+          />
+        </div>
+      </DialogContent>
+      <DialogActions sx={{ justifyContent: 'center' }}>
+        <Button onClick={handleDialogOk}>Request Info</Button>
+      </DialogActions>
+    </Dialog>
+  );
+  //#endregion
 
   // checkbox change handlers
   function smallDozerOnChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -129,50 +293,52 @@ export default function Page() {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {/* TODO: left side fixed, scroll right side */}
-      <div className="col-span-1 h-4">
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox onChange={smallDozerOnChange} />}
-            label="Small Dozer"
+    <>
+      {isDozerMoreInfoDialogOpen && dozerMoreInfoDialog}
+      <div className="grid grid-cols-4 gap-4">
+        {/* TODO: left side fixed, scroll right side */}
+        <div className="col-span-1 h-4">
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox onChange={smallDozerOnChange} />}
+              label="Small Dozer"
+            />
+            <FormControlLabel
+              control={<Checkbox onChange={mediumDozerOnChange} />}
+              label="Medium Dozer"
+            />
+            <FormControlLabel
+              control={<Checkbox onChange={largeDozerOnChange} />}
+              label="Large Dozer"
+            />
+            <FormControlLabel
+              control={<Checkbox onChange={wheelDozerOnChange} />}
+              label="Wheel Dozer"
+            />
+            <FormControlLabel
+              control={
+                <Slider
+                  getAriaLabel={() => 'Engine HP'}
+                  value={hpSliderValue}
+                  onChange={hpSliderOnChange}
+                  valueLabelDisplay="auto"
+                  getAriaValueText={() => `${hpSliderValue}`}
+                  min={minHp}
+                  max={maxHp}
+                />
+              }
+              label={`Engine HP: ${hpSliderValue[0]} - ${hpSliderValue[1]}`}
+              labelPlacement="top"
+            />
+          </FormGroup>
+        </div>
+        <div className="col-span-3 h-4">
+          <SearchResults
+            dozerInfos={filteredDozerInfos}
+            onDozerClick={handleDozerClick}
           />
-          <FormControlLabel
-            control={<Checkbox onChange={mediumDozerOnChange} />}
-            label="Medium Dozer"
-          />
-          <FormControlLabel
-            control={<Checkbox onChange={largeDozerOnChange} />}
-            label="Large Dozer"
-          />
-          <FormControlLabel
-            control={<Checkbox onChange={wheelDozerOnChange} />}
-            label="Wheel Dozer"
-          />
-          <FormControlLabel
-            control={
-              <Slider
-                getAriaLabel={() => 'Engine HP'}
-                value={hpSliderValue}
-                onChange={hpSliderOnChange}
-                valueLabelDisplay="auto"
-                getAriaValueText={() => `${hpSliderValue}`}
-                min={minHp}
-                max={maxHp}
-              />
-            }
-            label={`Engine HP: ${hpSliderValue[0]} - ${hpSliderValue[1]}`}
-            labelPlacement="top"
-          />
-        </FormGroup>
+        </div>
       </div>
-      <div className="col-span-3 h-4">
-        <SearchResults dozerInfos={filteredDozerInfos} />
-      </div>
-    </div>
-
-    // <>
-
-    // </>
+    </>
   );
 }

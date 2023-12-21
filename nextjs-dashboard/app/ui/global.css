@@ -26,3 +26,8 @@ div.cardContainer {
   width: 375px;
   margin: 5px;
 }
+
+div.moreInfoInput {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
