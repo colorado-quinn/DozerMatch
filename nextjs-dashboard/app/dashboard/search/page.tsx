@@ -209,10 +209,10 @@ export default function Page() {
     setHpSliderValue(newValue as number[]);
   };
 
-  function convertDataToDozers(data) {
-    const dozerInfos: DozerInfo[] = data.models.map((m) => {
+  function convertDataToDozers(data: any) {
+    const dozerInfos: DozerInfo[] = data.models.map((m:any) => {
       const powerSpec = m.specs.find(
-        (s) =>
+        (s:any) =>
           s.spec_name.toLowerCase().includes('power') &&
           !s.spec_name.toLowerCase().includes('speed'),
       );
@@ -223,7 +223,7 @@ export default function Page() {
           ? undefined
           : Number(powerSpec.spec_value[0].split(' ')[0]);
 
-      const weightSpec = m.specs.find((s) =>
+      const weightSpec = m.specs.find((s:any) =>
         s.spec_name.toLowerCase().includes('operating weight'),
       );
       const weigthString: string =
