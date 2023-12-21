@@ -1,6 +1,5 @@
 'use client';
 
-import { dozerDummyData } from '@/app/lib/api'; // TODO: fix CORS issue and fetch data
 import { DozerInfo } from '@/app/ui/search/DozerCard';
 import { useEffect, useState } from 'react';
 import SearchResults from '@/app/ui/search/SearchResults';
@@ -29,20 +28,42 @@ export default function Page() {
   const [includeWheel, setIncludeWheel] = useState(false);
   const [hpSliderValue, setHpSliderValue] = useState<number[]>([0, 1000]);
 
-  const dozerInfos: DozerInfo[] = convertDataToDozers(dozerDummyData);
-  const filteredDozerInfos: DozerInfo[] = dozerInfos.filter((d) =>
-    filterCriteria(d),
-  );
+  const [dozerInfos, setDozerInfos] = useState<DozerInfo[]>([]);
+  const [filteredDozerInfos, setFilteredDozerInfos] = useState<DozerInfo[]>([]);
+  const [overallMinHp, setOverallMinHp] = useState<number>();
+  const [overallMaxHp, setOverallMaxHp] = useState<number>();
+  //const [isLoading, setLoading] = useState(true)
 
-  // TODO: consider reduce for performance
-  const minHp: number = Math.min(
-    ...dozerInfos.map((d) => d.engineHp || 100000),
-  );
-  const maxHp: number = Math.max(...dozerInfos.map((d) => d.engineHp || 0));
-
+  // fetch dozer data from api
   useEffect(() => {
-    setHpSliderValue([minHp, maxHp]);
-  }, [minHp, maxHp]);
+    fetch('/api/cat')
+      .then((res) => res.json())
+      .then((data) => {
+        //setLoading(false)
+
+        const dozerInfos: DozerInfo[] = convertDataToDozers(data);
+        setDozerInfos(dozerInfos);
+
+        // TODO: consider reduce for performance
+        const minHp: number = Math.min(
+          ...dozerInfos.map((d) => d.engineHp || 100000),
+        );
+        setOverallMinHp(minHp);
+        const maxHp: number = Math.max(
+          ...dozerInfos.map((d) => d.engineHp || 0),
+        );
+        setOverallMaxHp(maxHp);
+        setHpSliderValue([minHp, maxHp]);
+      });
+  }, []);
+
+  // when filters change, update filtered list
+  useEffect(() => {
+    const filteredDozerInfos: DozerInfo[] = dozerInfos.filter((d) =>
+      filterCriteria(d),
+    );
+    setFilteredDozerInfos(filteredDozerInfos);
+  }, [includeSmall, includeMedium, includeLarge, includeWheel, hpSliderValue]);
 
   //#region RequestMoreInfo dialog
   const [dozerMoreInfo, setDozerMoreInfo] = useState<DozerInfo>();
@@ -150,7 +171,7 @@ export default function Page() {
       <DialogTitle>Request More Information</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Want more info on this this {dozerMoreInfo?.makeName}{' '}
+          Want more info on this {dozerMoreInfo?.makeName}{' '}
           {dozerMoreInfo?.modelName}? We&apos;d love to hear from you!
         </DialogContentText>
         <div className="moreInfoInput">
@@ -210,9 +231,9 @@ export default function Page() {
   };
 
   function convertDataToDozers(data: any) {
-    const dozerInfos: DozerInfo[] = data.models.map((m:any) => {
+    const dozerInfos: DozerInfo[] = data.models.map((m: any) => {
       const powerSpec = m.specs.find(
-        (s:any) =>
+        (s: any) =>
           s.spec_name.toLowerCase().includes('power') &&
           !s.spec_name.toLowerCase().includes('speed'),
       );
@@ -223,7 +244,7 @@ export default function Page() {
           ? undefined
           : Number(powerSpec.spec_value[0].split(' ')[0]);
 
-      const weightSpec = m.specs.find((s:any) =>
+      const weightSpec = m.specs.find((s: any) =>
         s.spec_name.toLowerCase().includes('operating weight'),
       );
       const weigthString: string =
@@ -323,8 +344,8 @@ export default function Page() {
                   onChange={hpSliderOnChange}
                   valueLabelDisplay="auto"
                   getAriaValueText={() => `${hpSliderValue}`}
-                  min={minHp}
-                  max={maxHp}
+                  min={overallMinHp}
+                  max={overallMaxHp}
                 />
               }
               label={`Engine HP: ${hpSliderValue[0]} - ${hpSliderValue[1]}`}
