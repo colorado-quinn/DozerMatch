@@ -31,3 +31,8 @@ div.moreInfoInput {
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
+/* disable ring shadow (clashes with mui) */
+input {
+  --tw-ring-shadow: 0 0 #000 !important;
+}

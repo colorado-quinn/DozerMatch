@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import SearchResults from '@/app/ui/search/SearchResults';
 import {
   Box,
-  Button,
   Checkbox,
   Dialog,
   DialogActions,
@@ -20,6 +19,7 @@ import {
 } from '@mui/material';
 import * as EmailValidator from 'email-validator';
 import { phone } from 'phone';
+import { Button } from '@/app/ui/button';
 
 export default function Page() {
   const [includeSmall, setIncludeSmall] = useState(false);
@@ -181,7 +181,7 @@ export default function Page() {
             onChange={handleRequestorNameChange}
             error={!requestorNameIsValid}
             helperText={
-              requestorNameIsValid ? '' : 'Please provide your full name'
+               requestorNameIsValid ? '' : 'Please provide your full name'
             }
           />
         </div>
@@ -207,7 +207,7 @@ export default function Page() {
         </div>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={handleDialogOk}>Request Info</Button>
+        <Button onClick={handleDialogOk} className='bg-blue-600'>Request Info</Button>
       </DialogActions>
     </Dialog>
   );
