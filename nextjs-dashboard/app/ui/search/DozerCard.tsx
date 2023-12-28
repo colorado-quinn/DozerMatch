@@ -22,22 +22,24 @@ export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
     <div className="cardContainer">
       <Card>
         <CardActionArea onClick={() => onDozerClick(dozer)}>
-          <CardContent>
-            <Box display={'flex'} justifyContent={'center'}>
+          <CardContent className="cardContent">
+            <span>
               <Image
                 src={dozer.imageUrl}
-                width={200}
-                height={200}
+                width={150}
+                height={150}
                 alt={`Picture of dozer ${dozer.makeName} - ${dozer.modelName}`}
               />
-            </Box>
-            <div>Make: {dozer.makeName}</div>
-            <div>Model: {dozer.modelName}</div>
-            <div>Category: {dozer.category}</div>
-            <div>Engine HP: {dozer.engineHpString}</div>
-            <div>Operating weight: {dozer.operatingWeightString}</div>
+            </span>
+            <span className="cardInfo">
+              <div>Make: {dozer.makeName}</div>
+              <div>Model: {dozer.modelName}</div>
+              <div>Category: {dozer.category}</div>
+              <div>Engine HP: {dozer.engineHpString}</div>
+              <div>Operating weight: {dozer.operatingWeightString}</div>
+            </span>
             {/* <div>Engine HP: {engineHp}</div>
-          <div>Operating weight: {operatingWeight}</div> */}
+              <div>Operating weight: {operatingWeight}</div> */}
           </CardContent>
         </CardActionArea>
       </Card>

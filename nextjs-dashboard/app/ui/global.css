@@ -23,8 +23,16 @@ div.dozerCardsContainer {
 }
 
 div.cardContainer {
-  width: 375px;
+  width: 450px;
   margin: 5px;
+}
+
+div.cardContent {
+  display: inline-flex;
+}
+
+span.cardInfo {
+  margin-left: 5px;
 }
 
 div.moreInfoInput {

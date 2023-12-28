@@ -4,7 +4,6 @@ import { DozerInfo } from '@/app/ui/search/DozerCard';
 import { useEffect, useState } from 'react';
 import SearchResults from '@/app/ui/search/SearchResults';
 import {
-  Box,
   Checkbox,
   Dialog,
   DialogActions,
@@ -15,7 +14,6 @@ import {
   FormGroup,
   Slider,
   TextField,
-  Typography,
 } from '@mui/material';
 import * as EmailValidator from 'email-validator';
 import { phone } from 'phone';
@@ -253,9 +251,10 @@ export default function Page() {
         weightSpec == undefined
           ? undefined
           : Number(weightSpec.spec_value[0].split(' ')[0]);
+      const productCategory = m.productCategory.split('/')[2];
 
       const dozerInfo: DozerInfo = {
-        category: m.productCategory,
+        category: productCategory,
         engineHp: powerNumber,
         engineHpString: powerString,
         makeName: m.brand,
@@ -356,7 +355,7 @@ export default function Page() {
         {/* Scroll wrapper */}
         <div className="flex flex-1 overflow-hidden">
           {/* Scrollable container */}
-          <div className="flex-1 overflow-y-scroll">
+          <div className="flex-1 overflow-y-auto">
             <SearchResults
               dozerInfos={filteredDozerInfos}
               onDozerClick={handleDozerClick}
