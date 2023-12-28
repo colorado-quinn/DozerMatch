@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardContent } from '@mui/material';
+import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import Image from 'next/image';
 
 export interface DozerInfo {
@@ -32,11 +32,11 @@ export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
               />
             </span>
             <span className="cardInfo">
-              <div>Make: {dozer.makeName}</div>
-              <div>Model: {dozer.modelName}</div>
-              <div>Category: {dozer.category}</div>
-              <div>Engine HP: {dozer.engineHpString}</div>
-              <div>Operating weight: {dozer.operatingWeightString}</div>
+              <Typography variant='body1'><b>Make:</b> {dozer.makeName}</Typography>
+              <Typography variant='body1'><b>Model:</b> {dozer.modelName}</Typography>
+              <Typography variant='body1'><b>Category:</b> {dozer.category}</Typography>
+              <Typography variant='body1'><b>Engine HP:</b> {dozer.engineHpString}</Typography>
+              <Typography variant='body1'><b>Operating weight:</b> {dozer.operatingWeightString}</Typography>
             </span>
             {/* <div>Engine HP: {engineHp}</div>
               <div>Operating weight: {operatingWeight}</div> */}
