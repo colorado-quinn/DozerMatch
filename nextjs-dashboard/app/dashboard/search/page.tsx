@@ -14,10 +14,12 @@ import {
   FormGroup,
   Slider,
   TextField,
+  Button,
 } from '@mui/material';
 import * as EmailValidator from 'email-validator';
 import { phone } from 'phone';
-import { Button } from '@/app/ui/button';
+// import { Button } from '@/app/ui/button';
+
 
 export default function Page() {
   const [includeSmall, setIncludeSmall] = useState(false);
@@ -169,8 +171,8 @@ export default function Page() {
       <DialogTitle>Request More Information</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Want more info on this {dozerMoreInfo?.makeName}{' '}
-          {dozerMoreInfo?.modelName}? We&apos;d love to hear from you!
+          Want more info on the {dozerMoreInfo?.makeName}{' '}
+          {dozerMoreInfo?.modelName}? We&apos;re here to help!
         </DialogContentText>
         <div className="moreInfoInput">
           <TextField
@@ -205,7 +207,8 @@ export default function Page() {
         </div>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={handleDialogOk} className='bg-blue-600'>Request Info</Button>
+      {/* <Button onClick={handleDialogOk} className='bg-blue-600'>Request Info</Button> */}
+      <Button onClick={handleDialogOk} variant="contained">Request Info!</Button>
       </DialogActions>
     </Dialog>
   );
