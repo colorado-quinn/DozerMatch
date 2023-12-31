@@ -31,7 +31,7 @@ export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
                 alt={`Picture of dozer ${dozer.makeName} - ${dozer.modelName}`}
               />
             </span>
-            <span className="cardInfo">
+            <span className="ml-5">
               <Typography variant='body1'><b>Make:</b> {dozer.makeName}</Typography>
               <Typography variant='body1'><b>Model:</b> {dozer.modelName}</Typography>
               <Typography variant='body1'><b>Category:</b> {dozer.category}</Typography>

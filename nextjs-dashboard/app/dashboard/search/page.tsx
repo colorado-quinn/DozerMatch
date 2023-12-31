@@ -15,11 +15,11 @@ import {
   Slider,
   TextField,
   Button,
+  FormLabel,
 } from '@mui/material';
 import * as EmailValidator from 'email-validator';
 import { phone } from 'phone';
 // import { Button } from '@/app/ui/button';
-
 
 export default function Page() {
   const [includeSmall, setIncludeSmall] = useState(false);
@@ -174,18 +174,18 @@ export default function Page() {
           Want more info on the {dozerMoreInfo?.makeName}{' '}
           {dozerMoreInfo?.modelName}? We&apos;re here to help!
         </DialogContentText>
-        <div className="moreInfoInput">
+        <div className="my-4">
           <TextField
             autoFocus={true}
             label={'Full Name'}
             onChange={handleRequestorNameChange}
             error={!requestorNameIsValid}
             helperText={
-               requestorNameIsValid ? '' : 'Please provide your full name'
+              requestorNameIsValid ? '' : 'Please provide your full name'
             }
           />
         </div>
-        <div className="moreInfoInput">
+        <div className="my-4">
           <TextField
             label={'Email'}
             onChange={handleRequestorEmailChange}
@@ -195,7 +195,7 @@ export default function Page() {
             }
           />
         </div>
-        <div className="moreInfoInput">
+        <div className="my-4">
           <TextField
             label={'Phone'}
             onChange={handleRequestorPhoneChange}
@@ -207,8 +207,10 @@ export default function Page() {
         </div>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
-      {/* <Button onClick={handleDialogOk} className='bg-blue-600'>Request Info</Button> */}
-      <Button onClick={handleDialogOk} variant="contained">Request Info!</Button>
+        {/* <Button onClick={handleDialogOk} className='bg-blue-600'>Request Info</Button> */}
+        <Button onClick={handleDialogOk} variant="contained">
+          Request Info!
+        </Button>
       </DialogActions>
     </Dialog>
   );
@@ -321,39 +323,47 @@ export default function Page() {
       <div className="flex h-full">
         {/* Fixed Sidebar */}
         <div className="flex-0">
-          <FormGroup>
-            <FormControlLabel
-              control={<Checkbox onChange={smallDozerOnChange} />}
-              label="Small Dozer"
-            />
-            <FormControlLabel
-              control={<Checkbox onChange={mediumDozerOnChange} />}
-              label="Medium Dozer"
-            />
-            <FormControlLabel
-              control={<Checkbox onChange={largeDozerOnChange} />}
-              label="Large Dozer"
-            />
-            <FormControlLabel
-              control={<Checkbox onChange={wheelDozerOnChange} />}
-              label="Wheel Dozer"
-            />
-            <FormControlLabel
-              control={
-                <Slider
-                  getAriaLabel={() => 'Engine HP'}
-                  value={hpSliderValue}
-                  onChange={hpSliderOnChange}
-                  valueLabelDisplay="auto"
-                  getAriaValueText={() => `${hpSliderValue}`}
-                  min={overallMinHp}
-                  max={overallMaxHp}
-                />
-              }
-              label={`Engine HP: ${hpSliderValue[0]} - ${hpSliderValue[1]}`}
-              labelPlacement="top"
-            />
-          </FormGroup>
+          <div className="mb-7">
+            <FormLabel component="legend">Category</FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox onChange={smallDozerOnChange} />}
+                label="Small Dozer"
+              />
+              <FormControlLabel
+                control={<Checkbox onChange={mediumDozerOnChange} />}
+                label="Medium Dozer"
+              />
+              <FormControlLabel
+                control={<Checkbox onChange={largeDozerOnChange} />}
+                label="Large Dozer"
+              />
+              <FormControlLabel
+                control={<Checkbox onChange={wheelDozerOnChange} />}
+                label="Wheel Dozer"
+              />
+            </FormGroup>
+          </div>
+          <div className="md:mb-7">
+            <FormGroup>
+              <FormLabel component="legend">Engine HP</FormLabel>
+              <FormControlLabel
+                control={
+                  <Slider
+                    getAriaLabel={() => 'Engine HP'}
+                    value={hpSliderValue}
+                    onChange={hpSliderOnChange}
+                    valueLabelDisplay="auto"
+                    getAriaValueText={() => `${hpSliderValue}`}
+                    min={overallMinHp}
+                    max={overallMaxHp}
+                  />
+                }
+                label={`${hpSliderValue[0]} - ${hpSliderValue[1]}`}
+                labelPlacement="top"
+              />
+            </FormGroup>
+          </div>
         </div>
         {/* Scroll wrapper */}
         <div className="flex flex-1 overflow-hidden">
