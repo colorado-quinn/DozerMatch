@@ -27,11 +27,16 @@ export default function Page() {
   const [includeLarge, setIncludeLarge] = useState(false);
   const [includeWheel, setIncludeWheel] = useState(false);
   const [hpSliderValue, setHpSliderValue] = useState<number[]>([0, 1000]);
+  const [opWeightSliderValue, setOpWeightSliderValue] = useState<number[]>([
+    0, 1000,
+  ]);
 
   const [dozerInfos, setDozerInfos] = useState<DozerInfo[]>([]);
   const [filteredDozerInfos, setFilteredDozerInfos] = useState<DozerInfo[]>([]);
   const [overallMinHp, setOverallMinHp] = useState<number>();
   const [overallMaxHp, setOverallMaxHp] = useState<number>();
+  const [overallMinOpWeight, setOverallMinOpWeight] = useState<number>();
+  const [overallMaxOpWeight, setOverallMaxOpWeight] = useState<number>();
   //const [isLoading, setLoading] = useState(true)
 
   // fetch dozer data from api
@@ -44,7 +49,7 @@ export default function Page() {
         const dozerInfos: DozerInfo[] = convertDataToDozers(data);
         setDozerInfos(dozerInfos);
 
-        // TODO: consider reduce for performance
+        // setup HP slider values
         const minHp: number = Math.min(
           ...dozerInfos.map((d) => d.engineHp || 100000),
         );
@@ -52,8 +57,23 @@ export default function Page() {
         const maxHp: number = Math.max(
           ...dozerInfos.map((d) => d.engineHp || 0),
         );
-        setOverallMaxHp(maxHp);
-        setHpSliderValue([minHp, maxHp]);
+        const ceilMaxHp: number = Math.ceil(maxHp / 10) * 10;
+        setOverallMaxHp(ceilMaxHp);
+        setHpSliderValue([minHp, ceilMaxHp]);
+
+        // setup op weight slider values
+        const minOpWeight: number = Math.min(
+          ...dozerInfos.map((d) => d.operatingWeight || 100000),
+        );
+        const flooredMinOpWeight: number =
+          Math.floor(minOpWeight / 1000) * 1000;
+        setOverallMinOpWeight(flooredMinOpWeight);
+        const maxOpWeight: number = Math.max(
+          ...dozerInfos.map((d) => d.operatingWeight || 0),
+        );
+        const ceilOpWeight: number = Math.ceil(maxOpWeight / 1000) * 1000;
+        setOverallMaxOpWeight(ceilOpWeight);
+        setOpWeightSliderValue([flooredMinOpWeight, ceilOpWeight]);
       });
   }, []);
 
@@ -63,7 +83,14 @@ export default function Page() {
       filterCriteria(d),
     );
     setFilteredDozerInfos(filteredDozerInfos);
-  }, [includeSmall, includeMedium, includeLarge, includeWheel, hpSliderValue]);
+  }, [
+    includeSmall,
+    includeMedium,
+    includeLarge,
+    includeWheel,
+    hpSliderValue,
+    opWeightSliderValue,
+  ]);
 
   //#region RequestMoreInfo dialog
   const [dozerMoreInfo, setDozerMoreInfo] = useState<DozerInfo>();
@@ -232,6 +259,12 @@ export default function Page() {
   const hpSliderOnChange = (event: Event, newValue: number | number[]) => {
     setHpSliderValue(newValue as number[]);
   };
+  const opWeightSliderOnChange = (
+    event: Event,
+    newValue: number | number[],
+  ) => {
+    setOpWeightSliderValue(newValue as number[]);
+  };
 
   function convertDataToDozers(data: any) {
     const dozerInfos: DozerInfo[] = data.models.map((m: any) => {
@@ -278,6 +311,7 @@ export default function Page() {
   function filterCriteria(dozer: DozerInfo): boolean {
     let meetsCategoryCriteria: boolean = false;
     let meetsHpCriteria: boolean = false;
+    let meetsOpWeightCriteria: boolean = false;
 
     const noCheckboxesSelected: boolean =
       !includeSmall && !includeMedium && !includeLarge && !includeWheel;
@@ -314,7 +348,16 @@ export default function Page() {
       meetsHpCriteria = true;
     }
 
-    return meetsCategoryCriteria && meetsHpCriteria;
+    if (dozer.operatingWeight == undefined) {
+      meetsOpWeightCriteria = true; // default true if value unknown, otherwise it will never show
+    } else if (
+      dozer.operatingWeight >= opWeightSliderValue[0] &&
+      dozer.operatingWeight <= opWeightSliderValue[1]
+    ) {
+      meetsOpWeightCriteria = true;
+    }
+
+    return meetsCategoryCriteria && meetsHpCriteria && meetsOpWeightCriteria;
   }
 
   return (
@@ -357,6 +400,7 @@ export default function Page() {
                     getAriaValueText={() => `${hpSliderValue}`}
                     min={overallMinHp}
                     max={overallMaxHp}
+                    step={10}
                   />
                 }
                 label={`${hpSliderValue[0]} - ${hpSliderValue[1]}`}
@@ -364,6 +408,25 @@ export default function Page() {
               />
             </FormGroup>
           </div>
+          <FormGroup>
+            <FormLabel component="legend">Operating Weight</FormLabel>
+            <FormControlLabel
+              control={
+                <Slider
+                  getAriaLabel={() => 'Operating Weight'}
+                  value={opWeightSliderValue}
+                  onChange={opWeightSliderOnChange}
+                  valueLabelDisplay="auto"
+                  getAriaValueText={() => `${opWeightSliderValue}`}
+                  min={overallMinOpWeight}
+                  max={overallMaxOpWeight}
+                  step={1000}
+                />
+              }
+              label={`${opWeightSliderValue[0]} - ${opWeightSliderValue[1]}`}
+              labelPlacement="top"
+            />
+          </FormGroup>
         </div>
         {/* Scroll wrapper */}
         <div className="flex flex-1 overflow-hidden">
