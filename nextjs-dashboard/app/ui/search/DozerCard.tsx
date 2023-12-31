@@ -23,11 +23,13 @@ export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
       <Card>
         <CardActionArea onClick={() => onDozerClick(dozer)}>
           <CardContent className="cardContent">
-            <span>
+            <span style={{width:"150px"}}>
               <Image
                 src={dozer.imageUrl}
-                width={150}
-                height={150}
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="w-full h-auto"
                 alt={`Picture of dozer ${dozer.makeName} - ${dozer.modelName}`}
               />
             </span>
