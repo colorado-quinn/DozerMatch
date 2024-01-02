@@ -193,6 +193,7 @@ export default function Page() {
     }
   };
 
+  // TODO: dialog transition, clashing with typing
   const dozerMoreInfoDialog: JSX.Element = (
     <Dialog open={isDozerMoreInfoDialogOpen} onClose={handleDialogCancel}>
       <DialogTitle>Request More Information</DialogTitle>

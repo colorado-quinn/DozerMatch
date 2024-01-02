@@ -21,6 +21,7 @@
     "bcrypt": "^5.1.1",
     "clsx": "^2.0.0",
     "email-validator": "^2.0.4",
+    "framer-motion": "^10.16.16",
     "next": "^14.0.2",
     "phone": "^3.1.41",
     "postcss": "8.4.31",

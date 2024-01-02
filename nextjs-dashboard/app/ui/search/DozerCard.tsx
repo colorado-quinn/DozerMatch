@@ -1,4 +1,5 @@
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 import Image from 'next/image';
 
 export interface DozerInfo {
@@ -18,6 +19,8 @@ export interface DozerCardProps {
 }
 
 export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
+  const textVariant:Variant = 'body2';
+
   return (
     <div className="cardContainer">
       <Card>
@@ -34,11 +37,11 @@ export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
               />
             </span>
             <span className="ml-5">
-              <Typography variant='body1'><b>Make:</b> {dozer.makeName}</Typography>
-              <Typography variant='body1'><b>Model:</b> {dozer.modelName}</Typography>
-              <Typography variant='body1'><b>Category:</b> {dozer.category}</Typography>
-              <Typography variant='body1'><b>Engine HP:</b> {dozer.engineHpString}</Typography>
-              <Typography variant='body1'><b>Operating weight:</b> {dozer.operatingWeightString}</Typography>
+              <Typography variant={textVariant}><b>Make:</b> {dozer.makeName}</Typography>
+              <Typography variant={textVariant}><b>Model:</b> {dozer.modelName}</Typography>
+              <Typography variant={textVariant}><b>Category:</b> {dozer.category}</Typography>
+              <Typography variant={textVariant}><b>Engine HP:</b> {dozer.engineHpString}</Typography>
+              <Typography variant={textVariant}><b>Operating weight:</b> {dozer.operatingWeightString}</Typography>
             </span>
             {/* <div>Engine HP: {engineHp}</div>
               <div>Operating weight: {operatingWeight}</div> */}
