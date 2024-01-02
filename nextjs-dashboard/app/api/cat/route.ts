@@ -1,19 +1,16 @@
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic'; // defaults to auto
-
 const baseUrl =
   'https://www.cat.com/content/catdotcom/en_US/products/new/equipment/dozers/jcr:content/root/responsivegrid/productcards.feed.json';
 
 export async function GET() {
-
   const requestHeaders: HeadersInit = new Headers();
   requestHeaders.set('User-Agent', 'DozerSearch/1.0.0');
 
   const res = await fetch(baseUrl, {
     headers: requestHeaders,
     method: 'GET',
-    credentials: "same-origin"
+    credentials: 'same-origin',
   });
 
   const data = await res.json();

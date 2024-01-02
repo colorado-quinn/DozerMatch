@@ -1,4 +1,5 @@
-import DozerCard, { DozerInfo } from '@/app/ui/search/DozerCard';
+import { DozerInfo } from '@/app/dashboard/search/types';
+import DozerCard from '@/app/ui/search/DozerCard';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export interface SearchResultsProps {

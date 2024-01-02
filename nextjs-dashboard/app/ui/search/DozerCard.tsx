@@ -1,18 +1,8 @@
+import { DozerInfo } from '@/app/dashboard/search/types';
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import Image from 'next/image';
 
-export interface DozerInfo {
-  modelId: string;
-  makeName: string;
-  modelName: string;
-  category: string;
-  engineHp: number | undefined;
-  engineHpString: string;
-  operatingWeight: number | undefined;
-  operatingWeightString: string;
-  imageUrl: string;
-}
 export interface DozerCardProps {
   dozer: DozerInfo;
   onDozerClick: (dozerInfo: DozerInfo) => void;
