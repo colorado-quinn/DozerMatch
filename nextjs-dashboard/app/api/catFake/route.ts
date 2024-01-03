@@ -1,4 +1,4 @@
-import { dozerDummyData } from '@/app/lib/api'; // TODO: fix CORS issue and fetch data
+import { dozerDummyData } from '@/app/lib/api';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
