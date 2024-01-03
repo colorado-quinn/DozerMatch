@@ -1,4 +1,5 @@
-import { DozerInfo } from '@/app/dashboard/search/types';
+
+import { DozerInfo } from './types';
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import Image from 'next/image';
