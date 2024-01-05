@@ -20,47 +20,27 @@ import * as EmailValidator from 'email-validator';
 import { phone } from 'phone';
 import { DozerInfo } from './types';
 
-export const SearchComponent = ({dozerInfos}:{dozerInfos: DozerInfo[]}) => {
+export const DozerSearch = ({dozerInfos}:{dozerInfos: DozerInfo[]}) => {
+  // setup HP slider values
+  const minHp: number = Math.min(
+    ...dozerInfos.map((d) => d.engineHp || 100000),
+  );
+  const maxHp: number = Math.max(...dozerInfos.map((d) => d.engineHp || 0));
+  const ceilMaxHp: number = Math.ceil(maxHp / 10) * 10;
+
+  // setup op weight slider values
+  const minOpWeight: number = Math.min(...dozerInfos.map((d) => d.operatingWeight || 100000));
+  const flooredMinOpWeight: number = Math.floor(minOpWeight / 1000) * 1000;
+  const maxOpWeight: number = Math.max(...dozerInfos.map((d) => d.operatingWeight || 0));
+  const ceilOpWeight: number = Math.ceil(maxOpWeight / 1000) * 1000;
+
   const [includeSmall, setIncludeSmall] = useState(false);
   const [includeMedium, setIncludeMedium] = useState(false);
   const [includeLarge, setIncludeLarge] = useState(false);
   const [includeWheel, setIncludeWheel] = useState(false);
-  const [hpSliderValue, setHpSliderValue] = useState<number[]>([0, 1000]);
-  const [opWeightSliderValue, setOpWeightSliderValue] = useState<number[]>([0, 1000]);
-
+  const [hpSliderValue, setHpSliderValue] = useState<number[]>([minHp, ceilMaxHp]);
+  const [opWeightSliderValue, setOpWeightSliderValue] = useState<number[]>([flooredMinOpWeight, ceilOpWeight]);
   const [filteredDozerInfos, setFilteredDozerInfos] = useState<DozerInfo[]>([]);
-  const [overallMinHp, setOverallMinHp] = useState<number>();
-  const [overallMaxHp, setOverallMaxHp] = useState<number>();
-  const [overallMinOpWeight, setOverallMinOpWeight] = useState<number>();
-  const [overallMaxOpWeight, setOverallMaxOpWeight] = useState<number>();
-
-  useEffect(() => {
-        // setup HP slider values
-        const minHp: number = Math.min(
-          ...dozerInfos.map((d) => d.engineHp || 100000),
-        );
-        setOverallMinHp(minHp);
-        const maxHp: number = Math.max(
-          ...dozerInfos.map((d) => d.engineHp || 0),
-        );
-        const ceilMaxHp: number = Math.ceil(maxHp / 10) * 10;
-        setOverallMaxHp(ceilMaxHp);
-        setHpSliderValue([minHp, ceilMaxHp]);
-
-        // setup op weight slider values
-        const minOpWeight: number = Math.min(
-          ...dozerInfos.map((d) => d.operatingWeight || 100000),
-        );
-        const flooredMinOpWeight: number =
-          Math.floor(minOpWeight / 1000) * 1000;
-        setOverallMinOpWeight(flooredMinOpWeight);
-        const maxOpWeight: number = Math.max(
-          ...dozerInfos.map((d) => d.operatingWeight || 0),
-        );
-        const ceilOpWeight: number = Math.ceil(maxOpWeight / 1000) * 1000;
-        setOverallMaxOpWeight(ceilOpWeight);
-        setOpWeightSliderValue([flooredMinOpWeight, ceilOpWeight]);
-  }, []);
 
   // when filters change, update filtered list
   useEffect(() => {
@@ -342,8 +322,8 @@ export const SearchComponent = ({dozerInfos}:{dozerInfos: DozerInfo[]}) => {
                     onChange={hpSliderOnChange}
                     valueLabelDisplay="auto"
                     getAriaValueText={() => `${hpSliderValue}`}
-                    min={overallMinHp}
-                    max={overallMaxHp}
+                    min={minHp}
+                    max={maxHp}
                     step={10}
                   />
                 }
@@ -362,8 +342,8 @@ export const SearchComponent = ({dozerInfos}:{dozerInfos: DozerInfo[]}) => {
                   onChange={opWeightSliderOnChange}
                   valueLabelDisplay="auto"
                   getAriaValueText={() => `${opWeightSliderValue}`}
-                  min={overallMinOpWeight}
-                  max={overallMaxOpWeight}
+                  min={minOpWeight}
+                  max={maxOpWeight}
                   step={1000}
                 />
               }
