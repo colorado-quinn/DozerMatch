@@ -18,6 +18,7 @@ export default function DozerCard({ dozer, onDozerClick }: DozerCardProps) {
         <CardActionArea onClick={() => onDozerClick(dozer)}>
           <CardContent className="cardContent">
             <span style={{width:"150px"}}>
+              {/* TODO: improve image load times */}
               <Image
                 src={dozer.imageUrl}
                 width={0}
