@@ -2,9 +2,10 @@ import { DozerSearch } from '@/app/ui/search/DozerSearch';
 import { fetchDozerData } from '@/app/lib/api';
 
 export default async function Page() {
-  const dozerInfos = await fetchDozerData();
+  // TODO: improve initial load times due to size (images are not the culprit)
+  // TODO: ensure mobile friendly layout
 
-  // TODO: fetch images on server?
+  const dozerInfos = await fetchDozerData();
 
   return <DozerSearch dozerInfos={dozerInfos}></DozerSearch>;
 }

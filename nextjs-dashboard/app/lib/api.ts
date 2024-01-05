@@ -5,7 +5,7 @@ export const fetchDozerData = async () : Promise<DozerInfo[]>  => {
   const baseUrl =
     'https://www.cat.com/content/catdotcom/en_US/products/new/equipment/dozers/jcr:content/root/responsivegrid/productcards.feed.json';
   const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set('User-Agent', 'DozerSearch/1.0.0');
+  requestHeaders.set('User-Agent', 'DozerSearch/1.0.1');
 
   const dozerInfos: DozerInfo[] = await fetch(baseUrl, {
     headers: requestHeaders,
