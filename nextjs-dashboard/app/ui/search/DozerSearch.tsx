@@ -323,7 +323,7 @@ export const DozerSearch = ({dozerInfos}:{dozerInfos: DozerInfo[]}) => {
                     valueLabelDisplay="auto"
                     getAriaValueText={() => `${hpSliderValue}`}
                     min={minHp}
-                    max={maxHp}
+                    max={ceilMaxHp}
                     step={10}
                   />
                 }
