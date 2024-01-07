@@ -342,8 +342,8 @@ export const DozerSearch = ({dozerInfos}:{dozerInfos: DozerInfo[]}) => {
                   onChange={opWeightSliderOnChange}
                   valueLabelDisplay="auto"
                   getAriaValueText={() => `${opWeightSliderValue}`}
-                  min={minOpWeight}
-                  max={maxOpWeight}
+                  min={flooredMinOpWeight}
+                  max={ceilOpWeight}
                   step={1000}
                 />
               }
