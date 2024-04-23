@@ -1,9 +1,22 @@
-export async function getDozerData() {
-  const data = await fetch(
-    'https://www.cat.com/content/catdotcom/en_US/products/new/equipment/dozers/jcr:content/root/responsivegrid/productcards.feed.json',
-  );
-  return data.json();
-}
+import { DozerInfo } from "../ui/search/types";
+import { convertDataToDozers } from "./utils";
+
+export const fetchDozerData = async () : Promise<DozerInfo[]>  => {
+  const baseUrl =
+    'https://www.cat.com/content/catdotcom/en_US/products/new/equipment/dozers/jcr:content/root/responsivegrid/productcards.feed.json';
+  const requestHeaders: HeadersInit = new Headers();
+  requestHeaders.set('User-Agent', 'DozerSearch/1.0.1');
+
+  const dozerInfos: DozerInfo[] = await fetch(baseUrl, {
+    headers: requestHeaders,
+    method: 'GET',
+    credentials: 'same-origin',
+  })
+    .then((res) => res.json())
+    .then((data) => convertDataToDozers(data));
+
+  return dozerInfos;
+};
 
 export const dozerDummyData = {
   sidekicks: [
